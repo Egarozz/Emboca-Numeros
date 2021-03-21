@@ -66,7 +66,6 @@ public class SolverPrueba {
 					
 					
 					List<Node> nuevosNodes = actualVertex.getNuevoNextNodes();
-					
 					queue.addAll(nuevosNodes);
 					
 				}else {
@@ -120,5 +119,21 @@ public Node solveDFS(Node vertex, Grid grid) {
 		return null;
 	}
 	
-	
+public boolean isTableroWatched(Table table) {
+  if(nodosVisitados.isEmpty()) {
+	  return false;
+  }
+	for(Table tabla: nodosVisitados) {
+		for(int fila = 0; fila < tabla.getColumnas(); fila++) {
+			for(int columna = 0; columna < tabla.getColumnas(); columna++) {
+				if(table.getTablero()[fila][columna] != tabla.getTablero()[fila][columna]) {
+					nodosVisitados.add(table);
+					return false;
+					
+				}
+			}
+		}
+	}
+	return true;
+ }
 }

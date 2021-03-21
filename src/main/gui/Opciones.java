@@ -4,8 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -98,74 +104,12 @@ public class Opciones extends JPanel{
 		
 		JList listaNumeros = new JList(modelo);
 		
-		modelo.addElement(10);
-		modelo.addElement(15);
-		modelo.addElement(22);
-		modelo.addElement(37);
-		modelo.addElement(46);
-		modelo.addElement(48);
-		modelo.addElement(54);
-		modelo.addElement(56);
-		modelo.addElement(60);
-		modelo.addElement(69);
-		modelo.addElement(70);
-		modelo.addElement(72);
-		modelo.addElement(73);
-		modelo.addElement(80);
-		modelo.addElement(83);
-		modelo.addElement(90);
-		modelo.addElement(96);
-		modelo.addElement(97);
-		modelo.addElement(99);
 		
-		modelo.addElement(237);
-		modelo.addElement(246);
-		modelo.addElement(278);
-		modelo.addElement(320);
-		modelo.addElement(379);
-		modelo.addElement(416);
-		modelo.addElement(441);
-		modelo.addElement(516);
-		modelo.addElement(694);
-		modelo.addElement(862);
-		modelo.addElement(960);
-		modelo.addElement(984);
-		modelo.addElement(997);
-		
-		modelo.addElement(1396);
-		modelo.addElement(1424);
-		modelo.addElement(1628);
-		modelo.addElement(1959);
-		modelo.addElement(2003);
-		modelo.addElement(2346);
-		modelo.addElement(2770);
-		modelo.addElement(3275);
-		modelo.addElement(3683);
-		modelo.addElement(4222);
-		modelo.addElement(5633);
-		modelo.addElement(6296);
-		modelo.addElement(6567);
-		modelo.addElement(7357);
-		modelo.addElement(8197);
-		modelo.addElement(8654);
-		modelo.addElement(9590);
-		modelo.addElement(9630);
-		modelo.addElement(9679);
-		
-		modelo.addElement(10763);
-		modelo.addElement(13510);
-		modelo.addElement(16034);
-		modelo.addElement(28228);
-		modelo.addElement(39869);
-		modelo.addElement(53261);
-		modelo.addElement(61673);
-		modelo.addElement(73624);
-		modelo.addElement(90405);
 		
 		
 	 
 		
-		
+		readTxtFiles();
 		
 		
 		
@@ -277,6 +221,7 @@ public class Opciones extends JPanel{
 				if(arg0.getSource().equals(botonResolver)) {
 					
 					if(botonResolver.getText().equals("Resolver")) {
+						saveTxtFiles();
 						spFila.setEnabled(false);
 						spColumna.setEnabled(false);
 						
@@ -413,6 +358,78 @@ public class Opciones extends JPanel{
 		g.setColor(Color.black);
 		g.drawRect(6, 6, 188, 60);
 	}
-	
+	public void readTxtFiles() {
+		File txtNumeros = new File("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\numeros.txt");
+		File txtGrid = new File("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\grid.txt");
+		Scanner reader;
+		try {
+			reader = new Scanner(txtNumeros);
+			while(reader.hasNextLine()) {
+				modelo.addElement(reader.nextLine());
+			}
+		} catch (FileNotFoundException e) {e.printStackTrace();}
+			
+		try {
+			reader = new Scanner(txtGrid);
+			if(reader.hasNextLine()) {
+			int Fila = reader.nextInt();
+			int Columna = reader.nextInt();
+			grid.setFila(Fila); 
+			grid.setColumna(Columna); 
+			}
+			while(reader.hasNextLine()) {
+			    String linea = reader.next();	
+			    
+				String[] bloque = linea.split("/");
+				grid.setBloqueActualMode(Integer.parseInt(bloque[0]), Integer.parseInt(bloque[1]));
+			    
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {e.printStackTrace();}	
+			
+		
+		
+	}
+	public void saveTxtFiles() {
+		try {
+			PrintStream writer = new PrintStream("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\numeros.txt");
+		    for(int i = 0; i < modelo.getSize(); i++) {
+		    	if(i == modelo.getSize()-1) {
+		    		writer.print(modelo.get(i));
+		    	}else {
+		    	    writer.println(modelo.get(i));
+		    	}
+		    }
+		     
+		    writer.close();
+		    
+		    
+		} catch (IOException e) {
+			
+		}
+		try {
+			PrintStream writer = new PrintStream("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\grid.txt");
+		    writer.println(grid.getFilas());
+		    writer.println(grid.getColumnas());
+		    
+		    List<Bloque> bloques = grid.getBloques();
+		    for(int i = 0; i < bloques.size();i++) {
+		    	String coord = String.valueOf(i) + "/" + String.valueOf(bloques.get(i).getActualMode());
+		    	if(i == bloques.size()-1) {
+		    		writer.print(coord);
+		    	}else {
+		    	    writer.println(coord);
+		    	}
+		    }
+		    
+		     
+		    writer.close();
+		    
+		    
+		} catch (IOException e) {
+			
+		}
+		
+	}
 	
 }

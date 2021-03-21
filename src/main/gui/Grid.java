@@ -44,79 +44,6 @@ public class Grid extends JPanel{
 		añadirBloques();
 		
 		
-		bloques.get(0).setActualMode(-1);
-		bloques.get(5).setActualMode(-1);
-		bloques.get(7).setActualMode(-1);
-		bloques.get(8).setActualMode(-1);
-		bloques.get(9).setActualMode(-1);
-		bloques.get(15).setActualMode(-1);
-		bloques.get(16).setActualMode(-1);
-		
-		bloques.get(21).setActualMode(-1);
-		bloques.get(24).setActualMode(2);
-		bloques.get(25).setActualMode(-1);
-		bloques.get(28).setActualMode(-1);
-		bloques.get(30).setActualMode(-1);
-		bloques.get(31).setActualMode(1);
-		bloques.get(32).setActualMode(7);
-		bloques.get(33).setActualMode(-1);
-
-		bloques.get(37).setActualMode(-1);
-		bloques.get(41).setActualMode(3);
-		bloques.get(42).setActualMode(-1);
-		bloques.get(43).setActualMode(-1);
-		bloques.get(46).setActualMode(-1);
-		
-		bloques.get(56).setActualMode(-1);
-		bloques.get(58).setActualMode(9);
-		bloques.get(62).setActualMode(-1);
-		bloques.get(63).setActualMode(-1);
-		bloques.get(65).setActualMode(-1);
-		bloques.get(66).setActualMode(-1);
-		
-		bloques.get(68).setActualMode(-1);
-		bloques.get(69).setActualMode(-1);
-		bloques.get(70).setActualMode(-1);
-		bloques.get(75).setActualMode(-1);
-		bloques.get(78).setActualMode(-1);
-		bloques.get(80).setActualMode(-1);
-		
-		bloques.get(89).setActualMode(-1);
-		bloques.get(91).setActualMode(-1);
-		bloques.get(94).setActualMode(-1);
-		bloques.get(99).setActualMode(-1);
-		bloques.get(100).setActualMode(-1);
-		bloques.get(101).setActualMode(-1);
-		
-		bloques.get(103).setActualMode(-1);
-		bloques.get(104).setActualMode(-1);
-		bloques.get(106).setActualMode(-1);
-		bloques.get(107).setActualMode(-1);
-		bloques.get(113).setActualMode(-1);
-		
-		bloques.get(123).setActualMode(-1);
-		bloques.get(126).setActualMode(-1);
-		bloques.get(127).setActualMode(-1);
-		bloques.get(132).setActualMode(-1);
-		
-		bloques.get(136).setActualMode(-1);
-		bloques.get(139).setActualMode(-1);
-		bloques.get(141).setActualMode(-1);
-		bloques.get(144).setActualMode(-1);
-		bloques.get(148).setActualMode(-1);
-		
-		bloques.get(153).setActualMode(-1);
-		bloques.get(154).setActualMode(-1);
-		bloques.get(155).setActualMode(8);
-		bloques.get(156).setActualMode(0);
-		bloques.get(157).setActualMode(7);
-		bloques.get(158).setActualMode(8);
-		bloques.get(159).setActualMode(4);
-		bloques.get(160).setActualMode(-1);
-		bloques.get(161).setActualMode(-1);
-		bloques.get(162).setActualMode(-1);
-		bloques.get(164).setActualMode(-1);
-		bloques.get(169).setActualMode(-1);
 		
 		
 		this.addMouseListener(new MouseListener() {
@@ -210,6 +137,10 @@ public class Grid extends JPanel{
 		
 		
 	}
+	public void setBloqueActualMode(int bloque, int mode) {
+		bloques.get(bloque).setActualMode(mode);
+	}
+	public List<Bloque> getBloques(){return bloques;}
 	public void showResults(Table tablero) {
 		  
 	 
