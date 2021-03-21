@@ -11,12 +11,12 @@ public class Table {
 	public static final int ALINEACION_VERTICAL = 0;
 	public static final int ALINEACION_HORIZONTAL = 1;
 	
-	private List<Integer> numerosOriginales;
-	private List<Integer> numerosDisponibles;
+	private List<String> numerosOriginales;
+	private List<String> numerosDisponibles;
 	
 	private List<int[]> coordenadasEncerradas;
 	
-	public Table(int filas, int columnas, int[] tablero, List<Integer> numerosOriginales) {
+	public Table(int filas, int columnas, int[] tablero, List<String> numerosOriginales) {
 		this.filas = filas;
 		this.columnas = columnas;
 		
@@ -25,13 +25,13 @@ public class Table {
 		numerosDisponibles = cloneList(numerosOriginales);
 		
 		this.coordenadasEncerradas = getCoordenadasEncerrados();
-		List<Integer> as = getNumerosEnTablero();
+		List<String> as = getNumerosEnTablero();
 		this.numerosOriginales.addAll(getNumerosEnTablero());
 		//numerosOriginales.add(80784);
 		//numerosOriginales.add(239);
 		//numerosOriginales.add(17);
 	}
-	public Table(int filas, int columnas, int[][] tablero, List<Integer> numerosOriginales) {
+	public Table(int filas, int columnas, int[][] tablero, List<String> numerosOriginales) {
 		this.filas = filas;
 		this.columnas = columnas;
 		
@@ -43,8 +43,8 @@ public class Table {
 		
 		this.numerosOriginales.addAll(getNumerosEnTablero());
 	}
-	public List<Integer> getNumerosEnTablero(){
-		List<Integer> numerosVisitados = new ArrayList<>();
+	public List<String> getNumerosEnTablero(){
+		List<String> numerosVisitados = new ArrayList<>();
 		
 		for(int fila = 0; fila < filas; fila++) {
 			for(int columna = 0; columna < columnas; columna++) {
@@ -53,7 +53,7 @@ public class Table {
 					continue;
 				}
 				
-				Integer value = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
+				String value = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
 				if(value != null) {
 					if(!numerosVisitados.contains(value)) {
 						
@@ -71,7 +71,7 @@ public class Table {
 					continue;
 				}
 				
-				Integer value = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
+				String value = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
 				if(value != null) {
 					if(!numerosVisitados.contains(value)) {
 						
@@ -89,7 +89,7 @@ public class Table {
 	public int getValueAtPoint(int fila, int columna) {
 		return this.tablero[fila][columna];
 	}
-	public Table(int filas, int columnas, int[][] tablero, List<Integer>numerosOriginales, List<Integer>numerosDisponibles) {
+	public Table(int filas, int columnas, int[][] tablero, List<String>numerosOriginales, List<String>numerosDisponibles) {
 		this.filas = filas;
 		this.columnas = columnas;
 		
@@ -168,7 +168,7 @@ public class Table {
 		return true;
 	}
 	public int getErroresEnTablero() {
-		List<Integer> numerosVisitados = new ArrayList<>();
+		List<String> numerosVisitados = new ArrayList<>();
 		int errores = 0;
 		for(int fila = 0; fila < filas; fila++) {
 			for(int columna = 0; columna < columnas; columna++) {
@@ -177,7 +177,7 @@ public class Table {
 					continue;
 				}
 				
-				Integer value = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
+				String value = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
 				if(value != null) {
 					if(!numerosOriginales.contains(value)) {
 						errores++;
@@ -207,7 +207,7 @@ public class Table {
 					continue;
 				}
 				
-				Integer value = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
+				String value = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
 				if(value != null) {
 					if(!numerosOriginales.contains(value)) {
 						errores++;
@@ -294,7 +294,7 @@ public class Table {
 		return valuesTablero;
 		
 	}
-	public void shiftPlaceAt(Integer numeroAPoner, int fila, int columna, int alineacion, Integer numeroACambiar, int[]coordenadaCambio) {
+	public void shiftPlaceAt(String numeroAPoner, int fila, int columna, int alineacion, String numeroACambiar, int[]coordenadaCambio) {
 		setValuesAt(numeroAPoner,fila,columna,alineacion);
 		
 		//shiftPlace
@@ -308,7 +308,7 @@ public class Table {
 			setValuesAt(numeroACambiar,coordenadaCambio[0],coordenadaCambio[1],Table.ALINEACION_VERTICAL);
 		}
 	}
-	public void setValuesAt(Integer numero, int fila, int columna, int alineacion) {
+	public void setValuesAt(String numero, int fila, int columna, int alineacion) {
 	  
 		if(alineacion == Table.ALINEACION_HORIZONTAL) {
 			int comienzo = getComienzo(fila,columna,alineacion);
@@ -355,15 +355,15 @@ public class Table {
 		int sizeFila = getSize(fila,columna, Table.ALINEACION_HORIZONTAL);
 		
 		if(sizeColumna == sizeFila) {
-			List<Integer> posiblesValues = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
+			List<String> posiblesValues = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
 			
-			for(Integer posibleNumero: posiblesValues) {
+			for(String posibleNumero: posiblesValues) {
 				
 				Table nextTableHorizontal = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				nextTableHorizontal.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_HORIZONTAL);
 				
 				if(nextTableHorizontal.getErroresEnTablero()==0) {
-					List<Integer> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
+					List<String> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
 					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				}
 				
@@ -371,50 +371,50 @@ public class Table {
 				nextTableVertical.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_VERTICAL);
 				
 				if(nextTableVertical.getErroresEnTablero()==0) {
-					List<Integer> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
+					List<String> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
 					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableVertical, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				}
 			}
 		}else {
 			
-         List<Integer> posiblesValuesHorizontal = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
-         List<Integer> posiblesValuesVertical = getPosiblesValues(fila,columna, Table.ALINEACION_VERTICAL);	
-			for(Integer posibleNumero: posiblesValuesHorizontal) {
+         List<String> posiblesValuesHorizontal = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
+         List<String> posiblesValuesVertical = getPosiblesValues(fila,columna, Table.ALINEACION_VERTICAL);	
+			for(String posibleNumero: posiblesValuesHorizontal) {
 				
 				Table nextTableHorizontal = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				nextTableHorizontal.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_HORIZONTAL);
 				
 				if(nextTableHorizontal.getErroresEnTablero()==0) {
-					List<Integer> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
+					List<String> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
 					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				}else {
-					List<Integer> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
-				    for(Integer numeroIntercambiable: numerosIntercambiables) {
+					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
+				    for(String numeroIntercambiable: numerosIntercambiables) {
 				    	Table tableCambiado = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_HORIZONTAL, posibleNumero, getCoordenadaNumero(numeroIntercambiable));
 				        if(tableCambiado.getErroresEnTablero()==0) {
-				        	List<Integer> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
+				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
 				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				        }
 				    }
 				}
 			 }
 			
-			for(Integer posibleNumero: posiblesValuesVertical) {
+			for(String posibleNumero: posiblesValuesVertical) {
 				
 				Table nextTableVertical = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				nextTableVertical.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_VERTICAL);
 				
 				if(nextTableVertical.getErroresEnTablero()==0) {
-					List<Integer> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
+					List<String> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
 					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableVertical, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				}else {
-					List<Integer> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
-				    for(Integer numeroIntercambiable: numerosIntercambiables) {
+					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
+				    for(String numeroIntercambiable: numerosIntercambiables) {
 				    	Table tableCambiado = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_VERTICAL, posibleNumero, getCoordenadaNumero(numeroIntercambiable));
 				        if(tableCambiado.getErroresEnTablero()==0) {
-				        	List<Integer> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
+				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
 				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,nextNumerosDisponibles.size()));
 				        }
 				    }
@@ -430,14 +430,14 @@ public class Table {
 		
 	}
 	
-	public List<Integer> getPosiblesValues(int fila, int columna, int alineacion){
-		List<Integer> posiblesValues = new ArrayList<>();
+	public List<String> getPosiblesValues(int fila, int columna, int alineacion){
+		List<String> posiblesValues = new ArrayList<>();
 		
 		
 		if(alineacion == Table.ALINEACION_HORIZONTAL) {
 		    String[] valoresFila = listToArray(getCifrasAt(fila,columna,alineacion));	
 		    
-			for(Integer posibleNumero: getPosiblesValuesBySize(getSize(fila,columna,alineacion))) {
+			for(String posibleNumero: getPosiblesValuesBySize(getSize(fila,columna,alineacion))) {
 				if(isPosibleValueCorrect(valoresFila,posibleNumero)) {
 				  if(isEntra(valoresFila,posibleNumero)) {
 					posiblesValues.add(posibleNumero);
@@ -451,7 +451,7 @@ public class Table {
 		if(alineacion == Table.ALINEACION_VERTICAL) {
 		    String[] valoresFila = listToArray(getCifrasAt(fila,columna,alineacion));
 		    
-			for(Integer posibleNumero: getPosiblesValuesBySize(getSize(fila,columna,alineacion))) {
+			for(String posibleNumero: getPosiblesValuesBySize(getSize(fila,columna,alineacion))) {
 				if(isPosibleValueCorrect(valoresFila,posibleNumero) ) {
 				  if(isEntra(valoresFila,posibleNumero)) {	
 					posiblesValues.add(posibleNumero);
@@ -464,14 +464,14 @@ public class Table {
 		
 		return posiblesValues;
 	}	
-	public List<Integer> getPosiblesNumerosIntercambiables(Integer posibleNumero){
-		List<Integer> posiblesNumeros = new ArrayList<>();
+	public List<String> getPosiblesNumerosIntercambiables(String posibleNumero){
+		List<String> posiblesNumeros = new ArrayList<>();
 		 for(int[] coordenada: coordenadasEncerradas){
 			 int fila = coordenada[0];
 			 int columna = coordenada[1];
 			 
 			
-				 Integer numeroHorizontal = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
+				 String numeroHorizontal = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
 				 
 				 if(numeroHorizontal!=null) {
 					 String[] numeroString = String.valueOf(numeroHorizontal).split("(?!^)");
@@ -483,7 +483,7 @@ public class Table {
 			 
 			 
 			 
-				 Integer numeroVertical = getValueAt(fila,columna,ALINEACION_VERTICAL);
+				 String numeroVertical = getValueAt(fila,columna,ALINEACION_VERTICAL);
 				 String[] numeroString = String.valueOf(numeroVertical).split("(?!^)");
 				 String[] numeroPosible = String.valueOf(posibleNumero).split("(?!^)");
 				 
@@ -497,21 +497,21 @@ public class Table {
 		 return posiblesNumeros;
 	}		  
 				  
-	public int[] getCoordenadaNumero(Integer numero) {
+	public int[] getCoordenadaNumero(String numero) {
 		for(int[] coordenada: coordenadasEncerradas){
 			 int fila = coordenada[0];
 			 int columna = coordenada[1];
 			 
-			 Integer numeroHorizontal = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
+			 String numeroHorizontal = getValueAt(fila,columna,Table.ALINEACION_HORIZONTAL);
 			 if(numeroHorizontal != null) {
-				 if(numeroHorizontal == numero) {
+				 if(numeroHorizontal.equals(numero)) {
 					 return coordenada;
 				 }
 			 }
 			 
-			 Integer numeroVertical = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
+			 String numeroVertical = getValueAt(fila,columna,Table.ALINEACION_VERTICAL);
 			 if(numeroVertical != null) {
-				 if(numeroVertical == numero) {
+				 if(numeroVertical.equals(numero)) {
 					 return coordenada;
 				 }
 			 }
@@ -575,7 +575,7 @@ public class Table {
 		return false;
 	}
 	
-	public boolean isEntra(String[] valoresFila, Integer posibleNumero) {
+	public boolean isEntra(String[] valoresFila, String posibleNumero) {
 		String[] posibleNumeroString = String.valueOf(posibleNumero).split("(?!^)");
 		for(int i = 0; i < posibleNumeroString.length;i++) {
 			if(!valoresFila[i].equals(String.valueOf(-2)) && !valoresFila[i].equals(posibleNumeroString[i])) {
@@ -584,7 +584,7 @@ public class Table {
 		}
 		return true;
 	}
-	public boolean isPosibleValueCorrect(String[] valoresFila, Integer posibleNumero) {
+	public boolean isPosibleValueCorrect(String[] valoresFila, String posibleNumero) {
 		String[] posibleNumeroString = String.valueOf(posibleNumero).split("(?!^)");
 		
 		if(posibleNumeroString.length != valoresFila.length) {
@@ -598,9 +598,9 @@ public class Table {
 		return true;
 	}
 	
-	public List<Integer> getPosiblesValuesBySize(int size) {
-		List<Integer> numerosDisponibles = new ArrayList<>();
-		for(Integer numero: this.numerosDisponibles) {
+	public List<String> getPosiblesValuesBySize(int size) {
+		List<String> numerosDisponibles = new ArrayList<>();
+		for(String numero: this.numerosDisponibles) {
 		    if(size == getSizeNumber(numero)) {
 		    	numerosDisponibles.add(numero);
 		    }
@@ -611,25 +611,25 @@ public class Table {
 	
 	
 	
-	public int getSizeNumber(Integer numero) {
+	public int getSizeNumber(String numero) {
 		String[] numeroString = String.valueOf(numero).split("(?!^)");
 		return numeroString.length;
 	}
-	public Integer getValueAt(int fila, int columna, int alineacion) {
+	public String getValueAt(int fila, int columna, int alineacion) {
 		String numeroString = "";
 		for(String cifra: getCifrasAt(fila,columna,alineacion)) {
+			if(cifra.equals("-2")) {
+				return null;
+			}
+			
 			numeroString+= cifra;
 		}
-		try {
-			if(numeroString.length()>1) {
-			 int numero = Integer.parseInt(numeroString);
-			  if(numero >= 0) {
-				  return numero;
-			  }
-			}
-		}catch(Exception e) {}
 		
-		 return null;
+		if(numeroString.length()<=1) {
+			return null;
+		}
+		
+		 return numeroString;
 		
 	}
 	
@@ -663,7 +663,7 @@ public class Table {
 	
 	
 	
-	public boolean removeNumeroDisponible(Integer numero) {
+	public boolean removeNumeroDisponible(String numero) {
 		if(numerosDisponibles.contains(numero)) {
 			numerosDisponibles.remove(numero);
 			return true;
@@ -671,15 +671,15 @@ public class Table {
 		return false;
 	}
 	
-	public List<Integer> removeCloneList(Integer numero){
-	   List<Integer> clonedList = cloneList(numerosDisponibles);
+	public List<String> removeCloneList(String numero){
+	   List<String> clonedList = cloneList(numerosDisponibles);
 	   clonedList.remove(numero);
 	   return clonedList;
 	}
 	
-	public List<Integer> cloneList(List<Integer> lista){
-		List<Integer> listaClonada = new ArrayList<>();
-		for(Integer numero: lista) {
+	public List<String> cloneList(List<String> lista){
+		List<String> listaClonada = new ArrayList<>();
+		for(String numero: lista) {
 			listaClonada.add(numero);
 		}
 		return listaClonada;
@@ -736,8 +736,8 @@ public class Table {
 		}
 		System.out.println("");
 	}
-	public List<Integer> getNumerosDisponibles(){return numerosDisponibles;}
-	public List<Integer> getNumerosOriginales(){return numerosOriginales;}
+	public List<String> getNumerosDisponibles(){return numerosDisponibles;}
+	public List<String> getNumerosOriginales(){return numerosOriginales;}
 	public int[][] getTablero(){return tablero;}
 	public int getFilas() {return filas;}
 	public int getColumnas() {return columnas;}

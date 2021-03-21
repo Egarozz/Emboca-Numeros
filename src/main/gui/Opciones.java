@@ -265,7 +265,7 @@ public class Opciones extends JPanel{
 					 }
 					
 					if(numero != null) {
-						modelo.addElement(numero);
+						modelo.addElement(listaTextField.getText());
 						listaTextField.setText("");
 						listaTextField.requestFocus();
 					}
@@ -298,9 +298,9 @@ public class Opciones extends JPanel{
 						listaTextField.setEnabled(false);
 						listaNumeros.setEnabled(false);
 						
-						List<Integer> numeros = new ArrayList<>();
+						List<String> numeros = new ArrayList<>();
 						for(int i = 0; i < modelo.getSize(); i++) {
-							numeros.add((int) modelo.getElementAt(i));
+							numeros.add(String.valueOf(modelo.getElementAt(i)));
 						}
 						
 						Table table = new Table(grid.getFilas(), grid.getColumnas(), grid.getTableValues(),numeros);

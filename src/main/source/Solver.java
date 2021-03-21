@@ -20,7 +20,7 @@ public class Solver {
 	private List<Node> nodes;
 	
 	private Stack<Node> stack;
-	public Solver(Table tablero, List<Integer> numeros) {
+	public Solver(Table tablero, List<String> numeros) {
 		this.nodes = new ArrayList<>();
 		this.tablero = tablero;
 		

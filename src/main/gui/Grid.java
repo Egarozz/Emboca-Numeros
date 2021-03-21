@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import main.gui.bloques.Bloque;
 import main.source.Table;
-import main.source.Tablero;
+
 
 public class Grid extends JPanel{
     
@@ -117,6 +117,7 @@ public class Grid extends JPanel{
 		bloques.get(162).setActualMode(-1);
 		bloques.get(164).setActualMode(-1);
 		bloques.get(169).setActualMode(-1);
+		
 		
 		this.addMouseListener(new MouseListener() {
 

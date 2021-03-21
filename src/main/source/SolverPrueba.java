@@ -22,7 +22,7 @@ public class SolverPrueba {
 	
 	private Stack<Node> stack;
 	private Queue<Node> queue;
-	public SolverPrueba(Table tablero, List<Integer> numeros, Grid grid) {
+	public SolverPrueba(Table tablero, List<String> numeros, Grid grid) {
 		this.nodosVisitados = new ArrayList<>();
 		this.queue = new PriorityQueue<>();
 		this.nodes = new ArrayList<>();
