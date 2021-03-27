@@ -323,6 +323,8 @@ public class Opciones extends JPanel{
 		
 		botonResolver.addActionListener(listenerBotones);
 		
+		JLabel autor = new JLabel("Ver: 1.1 by ESGL");
+		autor.setBounds(100, 580, 100, 10);
 		add(opcionesGrid);
 		add(labelFila);
 		add(spFila);
@@ -348,6 +350,7 @@ public class Opciones extends JPanel{
 		add(listaTextField);
 		add(anadirLista);
 		add(botonResolver);
+		add(autor);
 		setVisible(true);
 	}
 	
@@ -359,8 +362,10 @@ public class Opciones extends JPanel{
 		g.drawRect(6, 6, 188, 60);
 	}
 	public void readTxtFiles() {
-		File txtNumeros = new File("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\numeros.txt");
-		File txtGrid = new File("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\grid.txt");
+		String path = System.getProperty("user.dir");
+		
+		File txtNumeros = new File(path + "\\numeros.txt");
+		File txtGrid = new File(path + "\\grid.txt");
 		Scanner reader;
 		try {
 			reader = new Scanner(txtNumeros);
@@ -391,8 +396,9 @@ public class Opciones extends JPanel{
 		
 	}
 	public void saveTxtFiles() {
+		String path = System.getProperty("user.dir");
 		try {
-			PrintStream writer = new PrintStream("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\numeros.txt");
+			PrintStream writer = new PrintStream(path + "\\numeros.txt");
 		    for(int i = 0; i < modelo.getSize(); i++) {
 		    	if(i == modelo.getSize()-1) {
 		    		writer.print(modelo.get(i));
@@ -408,7 +414,7 @@ public class Opciones extends JPanel{
 			
 		}
 		try {
-			PrintStream writer = new PrintStream("C:\\Users\\LENOVO-TP\\eclipse-workspace\\Emboca-Numeros\\grid.txt");
+			PrintStream writer = new PrintStream(path + "\\grid.txt");
 		    writer.println(grid.getFilas());
 		    writer.println(grid.getColumnas());
 		    
