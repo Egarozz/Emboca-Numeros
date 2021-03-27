@@ -324,7 +324,7 @@ public class Opciones extends JPanel{
 		botonResolver.addActionListener(listenerBotones);
 		
 		JLabel autor = new JLabel("Ver: 1.1 by ESGL");
-		autor.setBounds(100, 580, 100, 10);
+		autor.setBounds(100, 580, 100, 15);
 		add(opcionesGrid);
 		add(labelFila);
 		add(spFila);
