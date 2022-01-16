@@ -16,16 +16,16 @@ public class SolverPrueba {
 	private Table tablero;
 	private Node actualVertex;
 	private Grid grid;
-	private List<Node> nodes;
+	
 	public static ArrayList<Table> nodosVisitados;
 	Timer timer;
 	
 	private Stack<Node> stack;
 	private Queue<Node> queue;
 	public SolverPrueba(Table tablero, List<String> numeros, Grid grid) {
-		this.nodosVisitados = new ArrayList<>();
+		
 		this.queue = new PriorityQueue<>();
-		this.nodes = new ArrayList<>();
+		
 		this.tablero = tablero;
 		this.grid = grid;
 		stack = new Stack<>();
@@ -66,7 +66,6 @@ public class SolverPrueba {
 					
 					
 					List<Node> nuevosNodes = actualVertex.getNuevoNextNodes();
-					
 					queue.addAll(nuevosNodes);
 					
 				}else {
@@ -99,7 +98,7 @@ public class SolverPrueba {
 	}
 	
 	public Node solve() {
-		//PriorityQueue<Node> queue = new PriorityQueue<>();
+		
 		queue.addAll(tablero.getFirstNodes());
 		timer.start();
 		if(actualVertex != null) {
@@ -120,5 +119,21 @@ public Node solveDFS(Node vertex, Grid grid) {
 		return null;
 	}
 	
-	
+public boolean isTableroWatched(Table table) {
+  if(nodosVisitados.isEmpty()) {
+	  return false;
+  }
+	for(Table tabla: nodosVisitados) {
+		for(int fila = 0; fila < tabla.getColumnas(); fila++) {
+			for(int columna = 0; columna < tabla.getColumnas(); columna++) {
+				if(table.getTablero()[fila][columna] != tabla.getTablero()[fila][columna]) {
+					nodosVisitados.add(table);
+					return false;
+					
+				}
+			}
+		}
+	}
+	return true;
+ }
 }

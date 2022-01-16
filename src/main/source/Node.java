@@ -8,7 +8,7 @@ public class Node implements Comparable<Node>{
   private String numero;
   private int tipoAlineamiento;
   private Node nodeAnterior;
-  private Node nodeSiguiente;
+  
     private Table tableroNuevo;
   private List<String> numeros;
   private int puntaje;
@@ -22,9 +22,9 @@ public class Node implements Comparable<Node>{
 	  this.numero = numero;
 	  this.nodeAnterior = nodeAnterior;
 	  this.tableroNuevo = tablero;
-	  this.nodeSiguiente = null;
+	  
 	  this.numeros = numeros;
-	  this.puntaje = this.getTableroNuevo().getErroresEnTablero();
+	  this.puntaje = puntaje;
   }
   
   public int getPuntaje() {return puntaje;}
@@ -58,7 +58,7 @@ public void setPuntaje(int j) {
 
 @Override
 public int compareTo(Node arg0) {
-	return this.getTableroNuevo().getErroresEnTablero() - arg0.getTableroNuevo().getErroresEnTablero();
+	return this.getPuntaje()-arg0.getPuntaje();
 	
 }
   

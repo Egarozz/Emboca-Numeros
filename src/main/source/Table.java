@@ -1,6 +1,8 @@
 package main.source;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Table {
@@ -229,20 +231,47 @@ public class Table {
 		return errores;
 	}
 	public int[] getNextPositionFree(){
-	  int[] coordenada = new int[2];	
+	  
+	  List<Espacio> coordenadas = new ArrayList<>();
+	  
 		for(int fila = 0; fila < filas; fila++) {
 			for(int columna = 0; columna < columnas; columna++) {
-				
-				if(tablero[fila][columna] != -2 && tablero[fila][columna] != -1) {
-					int[] posibleCoordenada = getPositionFirstNeighbor(fila,columna);
-			        if(posibleCoordenada[0]!=-3 && posibleCoordenada[1]!=-3) {
-			        	return posibleCoordenada;
-			        }
-			        continue;
-				}
+		    if(tablero[fila][columna] == -2) {
+			  List<String> posibleHorizontal = getPosiblesValues(fila,columna,Table.ALINEACION_HORIZONTAL);
+			  List<String> posibleVertical = getPosiblesValues(fila,columna,Table.ALINEACION_VERTICAL);
+			  int sizeHorizontal = posibleHorizontal.size();
+			  int sizeVertical = posibleVertical.size();
+			  int sizeTotal = sizeHorizontal + sizeVertical;
+			 
+				  if(sizeHorizontal == 1 && (sizeVertical > 1 || sizeHorizontal == -1)) {
+					  
+					  int[] coordenada = new int[2];
+					  coordenada[0] = fila;
+					  coordenada[1] = columna;
+					  return coordenada;
+				  }  
+				  
+				  if(sizeVertical == 1 && (sizeHorizontal > 1 || sizeHorizontal == -1)) {
+					  
+					  int[] coordenada = new int[2];
+					  coordenada[0] = fila;
+					  coordenada[1] = columna;
+					  return coordenada;
+				  }
+				   Espacio espacio = new Espacio(fila,columna,sizeTotal);
+				   coordenadas.add(espacio);
+				  
+				  
+			  }
 			}
 		}
-	  return coordenada;	
+	  Collections.sort(coordenadas);
+	  int[] coordenada = new int[2];
+	  if(!coordenadas.isEmpty()) {
+		  coordenada[0] = coordenadas.get(0).getFila();
+		  coordenada[1] = coordenadas.get(0).getColumna();
+	  }
+	  return coordenada;
 	}
 	
 	public int[] getPositionFirstNeighbor(int fila, int columna) {
@@ -351,42 +380,61 @@ public class Table {
 		int fila = coordenadas[0];
 		int columna = coordenadas[1];
 		
-		int sizeColumna = getSize(fila,columna, Table.ALINEACION_VERTICAL);
-		int sizeFila = getSize(fila,columna, Table.ALINEACION_HORIZONTAL);
 		
-		if(sizeColumna == sizeFila) {
-			List<String> posiblesValues = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
-			
-			for(String posibleNumero: posiblesValues) {
-				
-				Table nextTableHorizontal = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
-				nextTableHorizontal.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_HORIZONTAL);
-				
-				if(nextTableHorizontal.getErroresEnTablero()==0) {
-					List<String> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
-					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,nextNumerosDisponibles.size()));
-				}
-				
-				Table nextTableVertical = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
-				nextTableVertical.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_VERTICAL);
-				
-				if(nextTableVertical.getErroresEnTablero()==0) {
-					List<String> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
-					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableVertical, nextNumerosDisponibles,nextNumerosDisponibles.size()));
-				}
-			}
-		}else {
-			
+		
          List<String> posiblesValuesHorizontal = getPosiblesValues(fila,columna, Table.ALINEACION_HORIZONTAL);
          List<String> posiblesValuesVertical = getPosiblesValues(fila,columna, Table.ALINEACION_VERTICAL);	
-			for(String posibleNumero: posiblesValuesHorizontal) {
-				
+		  
+         if(posiblesValuesHorizontal.size()==1) {
+        	 Table nextTableHorizontal = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posiblesValuesHorizontal.get(0)));
+			 nextTableHorizontal.setValuesAt(posiblesValuesHorizontal.get(0), fila, columna, Table.ALINEACION_HORIZONTAL);
+			 if(nextTableHorizontal.getErroresEnTablero()==0) {
+					List<String> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posiblesValuesHorizontal.get(0));
+					nextNodes.add(new Node(posiblesValuesHorizontal.get(0), nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,posiblesValuesHorizontal.size() ));
+			        return nextNodes;
+			 }else{
+					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posiblesValuesHorizontal.get(0));
+				    for(String numeroIntercambiable: numerosIntercambiables) {
+				    	Table tableCambiado = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posiblesValuesHorizontal.get(0)));
+				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_HORIZONTAL, posiblesValuesHorizontal.get(0), getCoordenadaNumero(numeroIntercambiable));
+				        if(tableCambiado.getErroresEnTablero()==0) {
+				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posiblesValuesHorizontal.get(0));
+				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,posiblesValuesHorizontal.size()));
+				            return nextNodes;
+				        }
+				    }
+				}
+          }
+         
+         if(posiblesValuesVertical.size()==1) {
+        	 Table nextTableVertical = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posiblesValuesVertical.get(0)));
+			 nextTableVertical.setValuesAt(posiblesValuesVertical.get(0), fila, columna, Table.ALINEACION_VERTICAL);
+			 if(nextTableVertical.getErroresEnTablero()==0) {
+					List<String> nextNumerosDisponibles = nextTableVertical.removeCloneList(posiblesValuesVertical.get(0));
+					nextNodes.add(new Node(posiblesValuesVertical.get(0), nodeAnterior, nextTableVertical, nextNumerosDisponibles,posiblesValuesVertical.size() ));
+			        return nextNodes;
+			 }else {
+					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posiblesValuesVertical.get(0));
+				    for(String numeroIntercambiable: numerosIntercambiables) {
+				    	Table tableCambiado = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posiblesValuesVertical.get(0)));
+				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_VERTICAL, posiblesValuesVertical.get(0), getCoordenadaNumero(numeroIntercambiable));
+				        if(tableCambiado.getErroresEnTablero()==0) {
+				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posiblesValuesVertical.get(0));
+				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,posiblesValuesVertical.size() ));
+				            return nextNodes;
+				        }
+				    }
+				}
+          }
+			  
+           for(String posibleNumero: posiblesValuesHorizontal) {
+        	    int size = posiblesValuesHorizontal.size();
 				Table nextTableHorizontal = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				nextTableHorizontal.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_HORIZONTAL);
 				
 				if(nextTableHorizontal.getErroresEnTablero()==0) {
 					List<String> nextNumerosDisponibles = nextTableHorizontal.removeCloneList(posibleNumero);
-					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,nextNumerosDisponibles.size()));
+					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableHorizontal, nextNumerosDisponibles,size ));
 				}else {
 					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
 				    for(String numeroIntercambiable: numerosIntercambiables) {
@@ -394,20 +442,22 @@ public class Table {
 				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_HORIZONTAL, posibleNumero, getCoordenadaNumero(numeroIntercambiable));
 				        if(tableCambiado.getErroresEnTablero()==0) {
 				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
-				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,nextNumerosDisponibles.size()));
+				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,size ));
 				        }
 				    }
 				}
 			 }
-			
+		   
+		   
+			   
 			for(String posibleNumero: posiblesValuesVertical) {
-				
+				int size = posiblesValuesVertical.size();
 				Table nextTableVertical = new Table(filas,columnas,cloneTableValues(),numerosOriginales,removeCloneList(posibleNumero));
 				nextTableVertical.setValuesAt(posibleNumero, fila, columna, Table.ALINEACION_VERTICAL);
 				
 				if(nextTableVertical.getErroresEnTablero()==0) {
 					List<String> nextNumerosDisponibles = nextTableVertical.removeCloneList(posibleNumero);
-					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableVertical, nextNumerosDisponibles,nextNumerosDisponibles.size()));
+					nextNodes.add(new Node(posibleNumero, nodeAnterior, nextTableVertical, nextNumerosDisponibles,size ));
 				}else {
 					List<String> numerosIntercambiables = getPosiblesNumerosIntercambiables(posibleNumero);
 				    for(String numeroIntercambiable: numerosIntercambiables) {
@@ -415,12 +465,13 @@ public class Table {
 				        tableCambiado.shiftPlaceAt(numeroIntercambiable, fila, columna, Table.ALINEACION_VERTICAL, posibleNumero, getCoordenadaNumero(numeroIntercambiable));
 				        if(tableCambiado.getErroresEnTablero()==0) {
 				        	List<String> nextNumerosDisponibles = tableCambiado.removeCloneList(posibleNumero);
-				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,nextNumerosDisponibles.size()));
+				        	nextNodes.add(new Node(numeroIntercambiable, nodeAnterior, tableCambiado, nextNumerosDisponibles,size ));
 				        }
 				    }
 				}
 			}
-		}	
+		  
+			
 			
 			
 		
@@ -590,11 +641,7 @@ public class Table {
 		if(posibleNumeroString.length != valoresFila.length) {
 			return false;
 		}
-		//for(int i = 0; i < posibleNumeroString.length;i++) {
-		//	if(!valoresFila[i].equals(String.valueOf(-2)) && !valoresFila[i].equals(posibleNumeroString[i])) {
-		//		return false;
-		//	}
-		//}
+		
 		return true;
 	}
 	
@@ -743,28 +790,7 @@ public class Table {
 	public int getColumnas() {return columnas;}
 	
 	
-	public int getPuntaje() {
-	  int sumaTotal = 0;
-	  int sumaOcupado = 0;
-		for(int fila = 0; fila < filas; fila++) {
-			for(int columna = 0; columna < columnas; columna++) {
-		       if(tablero[fila][columna] != -1) {
-		    	   sumaTotal++;
-		       }
-			}
-		}
-		for(int fila = 0; fila < filas; fila++) {
-			for(int columna = 0; columna < columnas; columna++) {
-		       if(tablero[fila][columna] != -1 && tablero[fila][columna] != -2) {
-		    	   sumaOcupado++;
-		       }
-			}
-		}
-		int total = sumaTotal - sumaOcupado;
-		int sizeDisponibles = numerosDisponibles.size();
-		return (numerosDisponibles.size());
-		
-	}
+	
 	
 	
 		
