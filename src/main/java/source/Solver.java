@@ -1,4 +1,4 @@
-package main.source;
+package source;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import java.util.Stack;
 
 import javax.swing.SwingWorker;
 
-import main.gui.Grid;
+import gui.Grid;
 
 public class Solver {
 

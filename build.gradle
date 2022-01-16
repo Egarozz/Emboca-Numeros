@@ -1,0 +1,23 @@
+plugins {
+	id 'java'
+}
+repositories{
+	mavenCentral()
+}
+jar {
+	manifest{
+		attributes 'Main-Class':'gui.Frame'
+	}
+
+}
+task fatJar(type: Jar) {
+  manifest {
+    attributes 'Main-Class':'gui.Frame'
+  }
+  archiveClassifier = "all"
+  from {
+    
+    configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+  with jar
+}

@@ -1,4 +1,4 @@
-package main.source;
+package source;
 
 public class Espacio implements Comparable<Espacio>{
   private int fila;

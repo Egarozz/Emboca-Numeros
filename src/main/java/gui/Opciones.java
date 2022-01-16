@@ -1,11 +1,13 @@
-package main.gui;
+package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -29,11 +31,11 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import main.gui.bloques.Bloque;
-import main.source.Node;
-import main.source.Solver;
-import main.source.SolverPrueba;
-import main.source.Table;
+import gui.bloques.Bloque;
+import source.Node;
+import source.Solver;
+import source.SolverPrueba;
+import source.Table;
 
 
 
@@ -363,34 +365,61 @@ public class Opciones extends JPanel{
 	}
 	public void readTxtFiles() {
 		String path = System.getProperty("user.dir");
-		
-		File txtNumeros = new File(path + "/numeros.txt");
-		File txtGrid = new File(path + "/grid.txt");
+		BufferedReader br = null;
+	    BufferedReader br2 = null;
+	    
+		File txtNumeros = new File(path, "numeros.txt");
+		File txtGrid = new File(path, "grid.txt");
 		Scanner reader;
 		try {
+			br = new BufferedReader(new FileReader(path + "/numeros.txt"));	
 			reader = new Scanner(txtNumeros);
-			while(reader.hasNextLine()) {
-				modelo.addElement(reader.nextLine());
-			}
-		} catch (FileNotFoundException e) {e.printStackTrace();}
+			String contentLine = br.readLine();
+			while (contentLine != null) {
+				modelo.addElement(contentLine);
+				contentLine = br.readLine();
+			}	
+			
+//			while(reader.hasNextLine()) {
+//				modelo.addElement(reader.nextLine());
+//			}
+		} catch (IOException e) {e.printStackTrace();}
 			
 		try {
+			br2 = new BufferedReader(new FileReader(path + "/grid.txt"));	
 			reader = new Scanner(txtGrid);
-			if(reader.hasNextLine()) {
-			int Fila = reader.nextInt();
-			int Columna = reader.nextInt();
-			grid.setFila(Fila); 
-			grid.setColumna(Columna); 
+			String contentLine = br2.readLine();
+			
+			if (contentLine != null) {
+				int Fila = Integer.parseInt(contentLine);
+				contentLine = br2.readLine();
+				int Columna = Integer.parseInt(contentLine);
+				grid.setFila(Fila); 
+				grid.setColumna(Columna); 
 			}
-			while(reader.hasNextLine()) {
-			    String linea = reader.next();	
-			    
+			
+			String linea = br2.readLine();
+			while (linea != null) {
 				String[] bloque = linea.split("/");
 				grid.setBloqueActualMode(Integer.parseInt(bloque[0]), Integer.parseInt(bloque[1]));
-			    
+				linea = br2.readLine();
 			}
-			reader.close();
-		} catch (FileNotFoundException e) {e.printStackTrace();}	
+//			if(reader.hasNextLine()) {
+//				int Fila = reader.nextInt();
+//				int Columna = reader.nextInt();
+//				grid.setFila(Fila); 
+//				grid.setColumna(Columna); 
+//			}
+//			while(reader.hasNextLine()) {
+//			    String linea = reader.next();	
+//			    
+//				String[] bloque = linea.split("/");
+//				grid.setBloqueActualMode(Integer.parseInt(bloque[0]), Integer.parseInt(bloque[1]));
+//			    
+//			}
+			br.close();
+			br2.close();
+		} catch (IOException e) {e.printStackTrace();}	
 			
 		
 		

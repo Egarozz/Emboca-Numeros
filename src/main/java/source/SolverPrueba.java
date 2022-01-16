@@ -1,4 +1,4 @@
-package main.source;
+package source;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +10,7 @@ import java.util.Stack;
 
 import javax.swing.Timer;
 
-import main.gui.Grid;
+import gui.Grid;
 
 public class SolverPrueba {
 	private Table tablero;

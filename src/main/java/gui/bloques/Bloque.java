@@ -1,4 +1,4 @@
-package main.gui.bloques;
+package gui.bloques;
 
 import java.awt.Color;
 import java.awt.Font;

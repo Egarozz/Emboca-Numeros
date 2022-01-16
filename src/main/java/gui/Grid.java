@@ -1,4 +1,4 @@
-package main.gui;
+package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,8 +11,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import main.gui.bloques.Bloque;
-import main.source.Table;
+import gui.bloques.Bloque;
+import source.Table;
 
 
 public class Grid extends JPanel{
