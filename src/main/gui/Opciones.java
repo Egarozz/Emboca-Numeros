@@ -122,7 +122,7 @@ public class Opciones extends JPanel{
 		JTextField listaTextField = new JTextField();
 		listaTextField.setBounds(20,460,80,20);
 		
-		JButton anadirLista = new JButton("Añadir");
+		JButton anadirLista = new JButton("Add");
 		anadirLista.setBounds(105,459,80,20);
 		
 		
@@ -364,8 +364,8 @@ public class Opciones extends JPanel{
 	public void readTxtFiles() {
 		String path = System.getProperty("user.dir");
 		
-		File txtNumeros = new File(path + "\\numeros.txt");
-		File txtGrid = new File(path + "\\grid.txt");
+		File txtNumeros = new File(path + "/numeros.txt");
+		File txtGrid = new File(path + "/grid.txt");
 		Scanner reader;
 		try {
 			reader = new Scanner(txtNumeros);
@@ -398,7 +398,7 @@ public class Opciones extends JPanel{
 	public void saveTxtFiles() {
 		String path = System.getProperty("user.dir");
 		try {
-			PrintStream writer = new PrintStream(path + "\\numeros.txt");
+			PrintStream writer = new PrintStream(path + "/numeros.txt");
 		    for(int i = 0; i < modelo.getSize(); i++) {
 		    	if(i == modelo.getSize()-1) {
 		    		writer.print(modelo.get(i));
@@ -414,7 +414,7 @@ public class Opciones extends JPanel{
 			
 		}
 		try {
-			PrintStream writer = new PrintStream(path + "\\grid.txt");
+			PrintStream writer = new PrintStream(path + "/grid.txt");
 		    writer.println(grid.getFilas());
 		    writer.println(grid.getColumnas());
 		    

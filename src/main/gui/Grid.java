@@ -41,7 +41,7 @@ public class Grid extends JPanel{
 		fila = 10;
 		columna = 17;
 		findWidthCuadrado();
-		añadirBloques();
+		anadirBloques();
 		
 		
 		
@@ -194,7 +194,7 @@ public class Grid extends JPanel{
 		return values;
 	}
 	
-	public void añadirBloques() {
+	public void anadirBloques() {
 		for(int i = 0; i < fila; i++) {
 			   for(int j = 0; j < columna; j++) {
 				   
@@ -214,14 +214,14 @@ public class Grid extends JPanel{
 		this.fila = fila;
 		findWidthCuadrado();
 		bloques.clear();
-		añadirBloques();
+		anadirBloques();
 		repaint();
 	}
 	public void setColumna(int columna) {
 		this.columna = columna;
 		findWidthCuadrado();
 		bloques.clear();
-		añadirBloques();
+		anadirBloques();
 		repaint();
 	}
 	
